@@ -14,5 +14,9 @@ GET		/name				controllers.Application.getName()
 GET     /deal               controllers.Application.getDeal()
 POST    /deal/:id  controllers.Application.postDeal(id: String)
 
+# Dishes routes
+GET     /dishes     controllers.Application.getAllDishes()
+GET     /dishes/:id   controllers.Application.getDish(id: String)
+
 # Leaderborad
 GET     /leaderboard    controllers.Application.getLeaderboard()
