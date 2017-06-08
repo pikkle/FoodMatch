@@ -6,13 +6,13 @@ import play.api.libs.json.{JsValue, Json, Writes}
 import slick.driver.JdbcProfile
 import slick.driver.MySQLDriver.api._
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
   * Created by julienleroy on 29.05.17.
   */
 
-case class Dish (id: Long, name: String, score: Long, published: Boolean){
+case class Dish(id: Long, name: String, score: Long, published: Boolean) {
 
 }
 
@@ -31,24 +31,43 @@ class Dishes(tag: Tag) extends Table[Dish](tag, "dishes") {
 }
 
 
-class DishDAO @Inject() (dbConfigProvider: DatabaseConfigProvider) {
+class DishDAO @Inject()(implicit ec: ExecutionContext, dbConfigProvider: DatabaseConfigProvider) {
 
   val dbConfig = dbConfigProvider.get[JdbcProfile]
   val dishes = TableQuery[Dishes]
 
 
-  def getDish(): Future[Seq[Dish]] ={
-      dbConfig.db.run(dishes.result)
+  def getDish(): Future[Seq[Dish]] = {
+    dbConfig.db.run(dishes.result)
   }
+
+  def getDishId(id: Long): Future[Dish] = {
+    dbConfig.db.run(dishes.filter(_.id === id).result.head)
+  }
+
+  def getDishesByScore: Future[Seq[Dish]] = {
+    dbConfig.db.run(dishes.sortBy(_.score).result)
+  }
+
+  def incriseScore(id: Long) = {
+    var currentScore = dbConfig.db.run(dishes.filter(_.id === id).map(dishes => dishes.score).result.head)
+    currentScore.map(score => {
+      dbConfig.db.run(dishes.filter(_.id === id).map(dishes => dishes.score).update(score + 3))
+    })
+
+  }
+
 }
 
 object Dish {
 
   implicit val dishWrites: Writes[Dish] = new Writes[Dish] {
     override def writes(o: Dish): JsValue = Json.obj(
-      "name" -> o.name
+      "name" -> o.name,
+      "score" -> o.score
     )
   }
+
 }
 
 

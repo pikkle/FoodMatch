@@ -8,8 +8,6 @@ GET     /                           controllers.Application.index
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
-GET		/name				controllers.Application.getName()
-
 # Deals routes
 GET     /deal               controllers.Application.getDeal()
 POST    /deal/:id  controllers.Application.postDeal(id: String)
