@@ -22,8 +22,8 @@ class Application @Inject() (implicit ec: ExecutionContext, dishesDAO: DishDAO, 
 
   def getDeal: Action[AnyContent] = Action.async {
     dealDAO.getNewDeal.map{deal=>
-      Ok(Json.obj("status" -> "ok", "deal" -> deal)).as("spplication/json")
-    }
+      Ok(Json.obj("status" -> "ok", "deal" -> deal)).as("application/json")
+    }.recover{case _ => BadRequest}
   }
 
 
@@ -34,29 +34,29 @@ class Application @Inject() (implicit ec: ExecutionContext, dishesDAO: DishDAO, 
     dealDAO.getDeal(id).map{deals =>
       if (!deals.done) {
         dealDAO.voteDeal(id, side)
-        Ok(Json.obj("status" -> "ok"))
+        Ok
       } else {
-        Ok(Json.obj("status" -> "not ok"))
+        BadRequest("Deal over")
       }
-    }
+    }.recover{case _ => BadRequest}
   }
 
   def getLeaderboard: Action[AnyContent] = Action.async {
     dishesDAO.getDishesByScore.map{dishes =>
-      Ok(Json.obj("status" -> "ok", "dishes" -> dishes)).as("application/json")
-    }
+      Ok(Json.toJson(dishes)).as("application/json")
+    }.recover{case _ => BadRequest}
   }
 
   def getAllDishes: Action[AnyContent] = Action.async {
-    dishesDAO.getDish().map{dishes =>
-      Ok(Json.obj("status" -> "OK", "dishes" -> dishes)).as("application/json")
-    }
+    dishesDAO.getDish.map{dishes =>
+      Ok(Json.toJson(dishes)).as("application/json")
+    }.recover{case _ => BadRequest}
 
   }
 
   def getDish(id: String): Action[AnyContent] =  Action.async {
     dishesDAO.getDishId(id.toInt).map{dishes =>
-      Ok(Json.obj("status" -> "OK", "dishes" -> dishes)).as("application/json")
-    }
+      Ok(Json.toJson(dishes)).as("application/json")
+    }.recover{case _ => BadRequest}
   }
 }

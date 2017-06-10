@@ -42,8 +42,13 @@ class DealDAO @Inject() (implicit ec: ExecutionContext, dbConfigProvider: Databa
 
   def getNewDeal: Future[Deal] = {
     def uuid = java.util.UUID.randomUUID.toString
-    val action = insertQuery += Deal(0, uuid, 1, 2, done = false)
-    dbConfig.db.run(action)
+
+    for {
+      dishes <- dishDAO.getRandDishes()
+      action =  insertQuery += Deal(0, uuid, dishes(0).id, dishes(1).id, done = false)
+      deal <- dbConfig.db.run(action)
+    } yield deal
+
   }
 
   def getDeal(id: String): Future[Deal] = {

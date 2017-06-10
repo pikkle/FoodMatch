@@ -5,6 +5,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.json.{JsValue, Json, Writes}
 import slick.driver.JdbcProfile
 import slick.driver.MySQLDriver.api._
+import slick.jdbc.GetResult
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -30,36 +31,9 @@ class Dishes(tag: Tag) extends Table[Dish](tag, "dishes") {
     (id, name, score, published) <> ((Dish.apply _).tupled, Dish.unapply)
 }
 
-
-class DishDAO @Inject()(implicit ec: ExecutionContext, dbConfigProvider: DatabaseConfigProvider) {
-
-  val dbConfig = dbConfigProvider.get[JdbcProfile]
-  val dishes = TableQuery[Dishes]
-
-
-  def getDish(): Future[Seq[Dish]] = {
-    dbConfig.db.run(dishes.result)
-  }
-
-  def getDishId(id: Long): Future[Dish] = {
-    dbConfig.db.run(dishes.filter(_.id === id).result.head)
-  }
-
-  def getDishesByScore: Future[Seq[Dish]] = {
-    dbConfig.db.run(dishes.sortBy(_.score).result)
-  }
-
-  def incriseScore(id: Long) = {
-    var currentScore = dbConfig.db.run(dishes.filter(_.id === id).map(dishes => dishes.score).result.head)
-    currentScore.map(score => {
-      dbConfig.db.run(dishes.filter(_.id === id).map(dishes => dishes.score).update(score + 3))
-    })
-
-  }
-
-}
-
 object Dish {
+
+  implicit val getDishResult = GetResult(r => Dish(r.<<, r.<<, r.<<, r.<<))
 
   implicit val dishWrites: Writes[Dish] = new Writes[Dish] {
     override def writes(o: Dish): JsValue = Json.obj(
@@ -69,6 +43,42 @@ object Dish {
   }
 
 }
+
+
+class DishDAO @Inject()(implicit ec: ExecutionContext, dbConfigProvider: DatabaseConfigProvider) {
+
+  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  val dishes = TableQuery[Dishes]
+
+
+  def getDish: Future[Seq[Dish]] = {
+    //dbConfig.db.run(sql"SELECT * FROM dishes".as[Dish])
+    dbConfig.db.run(dishes.result)
+  }
+
+  def getDishId(id: Long): Future[Dish] = {
+    dbConfig.db.run(dishes.filter(_.id === id).result.head)
+  }
+
+  def getDishesByScore: Future[Seq[Dish]] = {
+    dbConfig.db.run(dishes.sortBy(_.score.desc).result)
+  }
+
+  def getRandDishes(): Future[Vector[Dish]] = {
+    dbConfig.db.run(sql"SELECT * FROM dishes ORDER BY RAND() LIMIT 0,2".as[Dish]).map(d => {
+      d.map(dishes=>dishes)
+    }
+    )
+  }
+
+  def incriseScore(id: Long) = {
+    val increse = 1
+    dbConfig.db.run(sqlu"UPDATE dishes SET score = score - ${increse}  WHERE id = ${id}")
+  }
+
+}
+
+
 
 
 
