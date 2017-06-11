@@ -13,7 +13,7 @@ import scala.concurrent.{ExecutionContext, Future}
   * Created by julienleroy on 29.05.17.
   */
 
-case class Dish(id: Long, name: String, img_url: String, score: Long, published: Boolean) {
+case class Dish(id: Long, name: String, img_url: String, keywords: String, score: Long, published: Boolean) {
 
 }
 
@@ -25,22 +25,25 @@ class Dishes(tag: Tag) extends Table[Dish](tag, "dishes") {
 
   def img_url = column[String]("img_url")
 
+  def keywords = column[String]("keywords")
+
   def score = column[Long]("score")
 
   def published = column[Boolean]("published")
 
   override def * =
-    (id, name, img_url, score, published) <> ((Dish.apply _).tupled, Dish.unapply)
+    (id, name, img_url, keywords, score, published) <> ((Dish.apply _).tupled, Dish.unapply)
 }
 
 object Dish {
 
-  implicit val getDishResult = GetResult(r => Dish(r.<<, r.<<, r.<<, r.<<, r.<<))
+  implicit val getDishResult = GetResult(r => Dish(r.<<, r.<<, r.<<, r.<<, r.<<, r.<<))
 
   implicit val dishWrites: Writes[Dish] = new Writes[Dish] {
     override def writes(o: Dish): JsValue = Json.obj(
       "name" -> o.name,
       "image" ->o.img_url,
+      "keywords" -> o.keywords,
       "score" -> o.score
     )
   }
