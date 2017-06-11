@@ -64,7 +64,7 @@ class DishDAO @Inject()(implicit ec: ExecutionContext, dbConfigProvider: Databas
   }
 
   def getDishesByScore: Future[Seq[Dish]] = {
-    dbConfig.db.run(dishes.sortBy(_.score.desc).result)
+    dbConfig.db.run(dishes.sortBy(_.score.desc).take(20).result)
   }
 
   def getRandDishes(): Future[Vector[Dish]] = {
