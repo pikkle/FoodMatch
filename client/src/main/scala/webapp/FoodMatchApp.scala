@@ -7,6 +7,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.scalajs.js.JSApp
 import ApiController._
+import org.scalajs.dom.html.{Div, Title}
 
 import scala.scalajs.js.annotation.JSExportTopLevel
 
@@ -33,7 +34,22 @@ object FoodMatchApp extends JSApp {
 
 	@JSExportTopLevel("initLeaderboard")
 	def initLeaderboard(): Unit = {
+		val container = dom.document.getElementById("leaderboard-container")
+		val dishExample = dom.document.getElementById("leaderboard-example")
 
+		fetchLeaderboard().map(leaderboard => {
+			var i = 1
+			leaderboard.foreach(dish => {
+				val div = dishExample.cloneNode(true).asInstanceOf[Div]
+				div.id = s"leaderboard-$i"
+				//div.childNodes(0).asInstanceOf[Div].childNodes(0).asInstanceOf[HTMLImageElement].src = dish.imageUrl
+				div.getElementsByTagName("img")(0).asInstanceOf[HTMLImageElement].src = dish.imageUrl
+				div.getElementsByTagName("h5")(0).textContent = dish.title
+				div.getElementsByTagName("p")(0).textContent = dish.keywords
+				container.appendChild(div)
+				i += 1
+			})
+		})
 	}
 
 	def changeDeal(): Unit = {

@@ -20,6 +20,16 @@ object ApiController {
 		case _ => throw new RuntimeException(s"Error on HTTP connection on ${"GET " + HOST + "/dishes/" + dishId}: error code $xhr.status")
 	})
 
+	def fetchLeaderboard(): Future[Seq[Dish]] = Ajax.get(HOST + "/leaderboard").flatMap(xhr => xhr.status match {
+		case 200 => parseDishesResponse(xhr.responseText)
+		case _ => throw new RuntimeException(s"Error on HTTP connection on ${"GET " + HOST + "/leaderboard"}: error code $xhr.status")
+	})
+
+	def parseDishesResponse(dishJson: String): Future[Seq[Dish]] = {
+		val dao = read[Seq[DishDAO]](dishJson)
+		Future.successful(dao.map(d => Dish(d.title, d.image, d.keywords, d.score)))
+	}
+
 	def parseDishResponse(dishJson: String): Future[Dish] = {
 		val dao = read[DishDAO](dishJson)
 		Future.successful(Dish(dao.title, dao.image, dao.keywords, dao.score))
