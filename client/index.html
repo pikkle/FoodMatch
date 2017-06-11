@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Food Match - Vote !</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="static/css/foodmatch.css" rel="stylesheet">
+    <link href="static/css/font-awesome.css" rel="stylesheet">
+</head>
+
+<body>
+
+<nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#"><i class="fa fa-cutlery" aria-hidden="true"></i> Food Match</a>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link active" href="index.html"><i class="fa fa-arrow-left" aria-hidden="true"></i><i
+                        class="fa fa-arrow-right" aria-hidden="true"></i> Vote
+                    <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="leaderboard.html"><i class="fa fa-list-ol" aria-hidden="true"></i> Leaderboard</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<h4 id="maintitle">Which of these dishes is the most appetizing ?</h4>
+<div class="choice-menu">
+    <div class="dish-box well" onclick="chooseLeft()">
+        <div class="dish-box-top">
+            <img src="http://img.sndimg.com/food/image/upload/w_555,h_416,c_fit,fl_progressive,q_95/v1/img/recipes/10/00/00/pic0oeHxy.jpg"/>
+        </div>
+        <div class="dish-box-bottom">
+            <h1>Plat numéro 1</h1>
+        </div>
+    </div>
+
+    <div class="dish-box well" onclick="chooseRight()">
+        <div class="dish-box-top">
+            <img src="http://img.sndimg.com/food/image/upload/w_555,h_416,c_fit,fl_progressive,q_95/v1/img/recipes/10/00/03/pic3hl6o1.jpg"/>
+        </div>
+        <div class="dish-box-bottom">
+            <h1>Plat numéro 2</h1>
+        </div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <div class="container">
+        <span class="text-muted">Keyboard shortcuts: <kbd>a</kbd> to vote for left, <kbd>l</kbd> for right !</span>
+    </div>
+</footer>
+
+
+<script type="text/javascript" src="./target/scala-2.12/client-fastopt.js"></script>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+        integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+        crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+        integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+        integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+        integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+        integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+        crossorigin="anonymous"></script>
+</body>
+</html>
