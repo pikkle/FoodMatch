@@ -1,7 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
+    <title>Food Match - Vote !</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="static/css/foodmatch.css" rel="stylesheet">
+    <link href="static/css/font-awesome.css" rel="stylesheet">
 </head>
 
 <body>
@@ -12,27 +25,58 @@
             aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand" href="#">Food Match</a>
+    <a class="navbar-brand" href="#"><i class="fa fa-cutlery" aria-hidden="true"></i> Food Match</a>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="index.html">Vote</a>
+            <li class="nav-item active">
+                <a class="nav-link active" href="index.html"><i class="fa fa-arrow-left" aria-hidden="true"></i><i
+                        class="fa fa-arrow-right" aria-hidden="true"></i> Vote
+                    <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="leaderboard.html">Leaderboard <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="leaderboard.html"><i class="fa fa-list-ol" aria-hidden="true"></i> Leaderboard</a>
             </li>
         </ul>
     </div>
 </nav>
 
-<div class="container">
-    <div class="jumbotron">
-        <h1>Navbar example</h1>
-        <p class="lead">This example is a quick exercise to illustrate how fixed to top navbar works. As you scroll, it
-            will remain fixed to the top of your browser's viewport.</p>
+<h4 id="maintitle">Which of these dishes is the most appetizing ?</h4>
+<div class="choice-menu">
+    <div class="dish-box well" id="dish-left" onclick="chooseLeft()">
+        <div class="dish-box-top">
+            <img id="left-image" src=""/>
+        </div>
+        <div class="dish-box-bottom">
+            <h4 id="left-dish-title"></h4>
+            <p id="left-dish-keywords"></p>
+        </div>
+    </div>
+
+    <div class="dish-box well" id="dish-right" onclick="chooseRight()">
+        <div class="dish-box-top">
+            <img id="right-image" src=""/>
+        </div>
+        <div class="dish-box-bottom">
+            <h4 id="right-dish-title"></h4>
+            <p id="right-dish-keywords"></p>
+        </div>
     </div>
 </div>
 
+
+<footer class="footer">
+    <div class="container">
+        <span class="text-muted">
+            <b>Keyboard shortcuts</b>
+            <span><kbd>a</kbd> vote left</span>
+            <span><kbd>l</kbd> vote right</span>
+            <span><kbd>r</kbd> load another match</span>
+        </span>
+    </div>
+</footer>
+
+
+<script type="text/javascript" src="./target/scala-2.11/client-fastopt.js"></script>
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
@@ -44,8 +88,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
         integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
         crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+        integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+        integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+        integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+        crossorigin="anonymous"></script>
 </body>
 </html>

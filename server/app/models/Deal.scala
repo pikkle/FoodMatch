@@ -14,70 +14,74 @@ import scala.concurrent.{ExecutionContext, Future}
   */
 
 
-case class Deal (id: Long, uid: String, left: Long, right: Long, done: Boolean)
+case class Deal(id: Long, uid: String, left: Long, right: Long, done: Boolean)
 
 class Deals(tag: Tag) extends Table[Deal](tag, "deals") {
 
-  val dishes = TableQuery[Dishes]
+	val dishes = TableQuery[Dishes]
 
-  def id = column[Long]("id", O.PrimaryKey,O.AutoInc)
-  def uid = column[String]("uid")
-  def left_id = column[Long]("left_id")
-  def right_id = column[Long]("right_id")
-  def done = column[Boolean]("done")
+	def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
 
-  def left = foreignKey("left_dish_fk", left_id, dishes)(_.id)
-  def right = foreignKey("right_dish_fk", right_id, dishes)(_.id)
+	def uid = column[String]("uid")
 
-  override def * =
-    (id, uid, left_id, right_id, done) <>((Deal.apply _).tupled, Deal.unapply)
+	def left_id = column[Long]("left_id")
+
+	def right_id = column[Long]("right_id")
+
+	def done = column[Boolean]("done")
+
+	def left = foreignKey("left_dish_fk", left_id, dishes)(_.id)
+
+	def right = foreignKey("right_dish_fk", right_id, dishes)(_.id)
+
+	override def * =
+		(id, uid, left_id, right_id, done) <> ((Deal.apply _).tupled, Deal.unapply)
 }
 
-class DealDAO @Inject() (implicit ec: ExecutionContext, dbConfigProvider: DatabaseConfigProvider, dishDAO: DishDAO) {
-  val dbConfig: DatabaseConfig[JdbcProfile] = dbConfigProvider.get[JdbcProfile]
-  val deals: TableQuery[Deals] = TableQuery[Deals]
+class DealDAO @Inject()(implicit ec: ExecutionContext, dbConfigProvider: DatabaseConfigProvider, dishDAO: DishDAO) {
+	val dbConfig: DatabaseConfig[JdbcProfile] = dbConfigProvider.get[JdbcProfile]
+	val deals: TableQuery[Deals] = TableQuery[Deals]
 
 
-  val insertQuery: MySQLDriver.IntoInsertActionComposer[Deal, Deal] = deals returning deals.map(_.id) into ((deal, id) => deal.copy(id = id))
+	val insertQuery: MySQLDriver.IntoInsertActionComposer[Deal, Deal] = deals returning deals.map(_.id) into ((deal, id) => deal.copy(id = id))
 
-  def getNewDeal: Future[Deal] = {
-    def uuid = java.util.UUID.randomUUID.toString
+	def getNewDeal: Future[Deal] = {
+		def uuid = java.util.UUID.randomUUID.toString
 
-    for {
-      dishes <- dishDAO.getRandDishes()
-      action =  insertQuery += Deal(0, uuid, dishes(0).id, dishes(1).id, done = false)
-      deal <- dbConfig.db.run(action)
-    } yield deal
+		for {
+			dishes <- dishDAO.getRandDishes()
+			action = insertQuery += Deal(0, uuid, dishes(0).id, dishes(1).id, done = false)
+			deal <- dbConfig.db.run(action)
+		} yield deal
 
-  }
+	}
 
-  def getDeal(id: String): Future[Deal] = {
-    dbConfig.db.run(deals.filter(_.uid === id).result.head)
-  }
+	def getDeal(id: String): Future[Deal] = {
+		dbConfig.db.run(deals.filter(_.uid === id).result.head)
+	}
 
-  def voteDeal(id: String, side: String): Future[Any] = {
-    dbConfig.db.run(deals.filter(_.uid === id).result.head).map{deals =>
-      val right = deals.right
-      val left = deals.left
-      println(side)
+	def voteDeal(id: String, side: String): Future[Any] = {
+		dbConfig.db.run(deals.filter(_.uid === id).result.head).map { deals =>
+			val right = deals.right
+			val left = deals.left
 
-      if (side == "left"){
-        dishDAO.incriseScore(left, right, 1)
-      } else if (side == "right"){
-        dishDAO.incriseScore(left, right, 0)
-      }
-    }
-    //dbConfig.db.run(deals.filter(_.uid === id).map(_.done).update(true))
-  }
+			if (side == "left") {
+				dishDAO.incriseScore(left, right, 1)
+			} else if (side == "right") {
+				dishDAO.incriseScore(left, right, 0)
+			}
+		}
+		//dbConfig.db.run(deals.filter(_.uid === id).map(_.done).update(true))
+	}
 
 }
 
 object Deal {
-  implicit val dealWrites: Writes[Deal] = new Writes[Deal] {
-    override def writes(o: Deal): JsValue = Json.obj(
-      "uid" -> o.uid,
-      "left" -> o.left,
-      "right" -> o.right
-    )
-  }
+	implicit val dealWrites: Writes[Deal] = new Writes[Deal] {
+		override def writes(o: Deal): JsValue = Json.obj(
+			"uid" -> o.uid,
+			"left" -> o.left,
+			"right" -> o.right
+		)
+	}
 }

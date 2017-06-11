@@ -1,21 +1,21 @@
 package webapp
 
 import org.scalajs.dom
-import org.scalajs.dom.ext.Ajax
 import org.scalajs.dom.raw.HTMLImageElement
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 import scala.scalajs.js.JSApp
+import ApiController._
+
 import scala.scalajs.js.annotation.JSExportTopLevel
-import upickle.default._
 
 object FoodMatchApp extends JSApp {
 	var voted: Boolean = false
-	val HOST: String = "http://localhost:9000"
 	var deal: Deal = _
 
-	def main(): Unit = {
+	@JSExportTopLevel("initMatch")
+	def initMatch(): Unit = {
 		dom.document.addEventListener(
 			"keypress",
 			(e0: dom.Event) => {
@@ -29,6 +29,11 @@ object FoodMatchApp extends JSApp {
 			},
 			useCapture = false)
 		changeDeal()
+	}
+
+	@JSExportTopLevel("initLeaderboard")
+	def initLeaderboard(): Unit = {
+
 	}
 
 	def changeDeal(): Unit = {
@@ -60,39 +65,10 @@ object FoodMatchApp extends JSApp {
 
 			turnGrayOff("left-image")
 			turnGrayOff("right-image")
+
 			voted = false
 		})
 	}
-
-	def fetchDeal(): Future[Deal] = Ajax.get(HOST + "/deal").flatMap(xhr => xhr.status match {
-		case 200 => parseDealResponse(xhr.responseText)
-		case _ => throw new NoSuchElementException(s"ERROR WHILE FETCHING: $xhr.status")
-	})
-
-	def fetchDish(dishId: Int): Future[Dish] = Ajax.get(HOST + "/dishes/" + dishId).flatMap(xhr => xhr.status match {
-		case 200 => parseDishResponse(xhr.responseText)
-		case _ => throw new NoSuchElementException(s"ERROR WHILE FETCHING: $xhr.status")
-	})
-
-
-	def parseDishResponse(dishJson: String): Future[Dish] = {
-		val dao = read[DishDAO](dishJson)
-		Future.successful(Dish(dao.title, dao.image, dao.keywords, dao.score))
-	}
-
-	def parseDealResponse(dealJson: String): Future[Deal] = {
-		val dao = read[DealWrapperDAO](dealJson)
-		fetchDish(dao.deal.left).flatMap(left =>
-			fetchDish(dao.deal.right).map(right =>
-				Deal(dao.deal.uid, left, right)
-			)
-		)
-	}
-
-	def postChoice(choice: String): Unit = Ajax.post(HOST + "/deal/" + deal.uid, s"""{ "side": "$choice" }""").map(xhr => xhr.status match {
-		case 200 => changeDeal()
-		case _ =>
-	})
 
 	def turnGrayOn(imageId: String): Unit = {
 		dom.document.getElementById(imageId).classList.add("grayscale")
@@ -106,17 +82,13 @@ object FoodMatchApp extends JSApp {
 		if (!voted) {
 			voted = true
 			turnGrayOn(grayout)
-			postChoice(choice)
-		} else {
-
+			postChoice(choice, deal.uid).map(_ => changeDeal())
 		}
 	}
 
-	@JSExportTopLevel("chooseLeft")
 	def chooseLeft(): Unit = choose("left", "right-image")
 
-	@JSExportTopLevel("chooseRight")
 	def chooseRight(): Unit = choose("right", "left-image")
 
+	override def main(): Unit = {}
 }
-
