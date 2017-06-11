@@ -1,0 +1,78 @@
+html {
+  position: relative;
+  min-height: 100%; }
+
+body {
+  margin-bottom: 60px; }
+
+.choice-menu {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 40px; }
+  .choice-menu .dish-box {
+    width: 390px;
+    margin: 20px;
+    cursor: pointer; }
+    .choice-menu .dish-box .dish-box-top {
+      height: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center; }
+      .choice-menu .dish-box .dish-box-top img {
+        width: 350px;
+        max-height: 300px;
+        background-position: center center;
+        background-repeat: no-repeat;
+        overflow: hidden; }
+    .choice-menu .dish-box .dish-box-bottom {
+      min-height: 30px;
+      margin-top: 5px; }
+      .choice-menu .dish-box .dish-box-bottom h4 {
+        text-align: center; }
+
+.navbar-brand {
+  font-size: 30px; }
+
+.jumbotron h1 {
+  margin-top: 10px;
+  text-align: center; }
+
+#content > #right > .dose > .dosesingle,
+#content > #center > .dose > .dosesingle {
+  display: none !important; }
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  line-height: 60px;
+  /* Vertically center the text there */
+  background-color: #f5f5f5;
+  text-align: center; }
+  .footer .text-muted {
+    display: flex;
+    justify-content: space-around; }
+
+.well {
+  min-height: 20px;
+  padding: 19px;
+  margin-bottom: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #e3e3e3;
+  border-radius: 2px; }
+
+#maintitle {
+  margin-top: 100px;
+  text-align: center; }
+
+img {
+  -webkit-transition: all 1000ms; }
+
+img.grayscale {
+  -webkit-filter: grayscale(1); }
+
+/*# sourceMappingURL=foodmatch.css.map */
