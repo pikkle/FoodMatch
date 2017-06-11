@@ -3,7 +3,7 @@ package models
 import com.google.inject.Inject
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.json.{JsValue, Json, Writes}
-import slick.driver.JdbcProfile
+import slick.driver.{JdbcProfile, MySQLDriver}
 import slick.driver.MySQLDriver.api._
 import slick.jdbc.GetResult
 
@@ -42,7 +42,7 @@ object Dish {
   implicit val dishWrites: Writes[Dish] = new Writes[Dish] {
     override def writes(o: Dish): JsValue = Json.obj(
       "name" -> o.name,
-      "image" ->o.img_url,
+      "image" -> o.img_url,
       "keywords" -> o.keywords,
       "score" -> o.score
     )
@@ -72,14 +72,37 @@ class DishDAO @Inject()(implicit ec: ExecutionContext, dbConfigProvider: Databas
 
   def getRandDishes(): Future[Vector[Dish]] = {
     dbConfig.db.run(sql"SELECT * FROM dishes ORDER BY RAND() LIMIT 0,2".as[Dish]).map(d => {
-      d.map(dishes=>dishes)
+      d.map(dishes => dishes)
     }
     )
   }
 
-  def incriseScore(id: Long) = {
-    val increse = 1
-    dbConfig.db.run(sqlu"UPDATE dishes SET score = score - ${increse}  WHERE id = ${id}")
+  def expected(elo1: Long, elo2: Long): Double = 1 / ( 1 + Math.pow(10, ( elo2 - elo1 ) / 400) )
+
+
+  def new_elo(elo1: Long, elo2: Long, score: Long): Long =  {
+    val k = 80
+    val newElo = Math.rint(elo1 + k * ( score - expected(elo1, elo2))).toLong
+
+    if (newElo < 300) 300
+    else newElo
+  }
+
+
+  def incriseScore(leftId: Long, rightId: Long, score: Int): Future[Unit] = {
+
+    val query = (for {
+      leftS <- dishes.filter(_.id === leftId).map(_.score).result
+      rightS <- dishes.filter(_.id === rightId).map(_.score).result
+      leftNS = new_elo(leftS.head, rightS.head, score)
+      rightNS = new_elo(rightS.head, leftS.head, 1 - score)
+
+      updateLeft <- dishes.filter(_.id === leftId).map(_.score).update(leftNS)
+      updateRight <- dishes.filter(_.id === rightId).map(_.score).update(rightNS)
+    } yield ()).transactionally
+
+
+    dbConfig.db.run(query)
   }
 
 }

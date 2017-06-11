@@ -62,9 +62,9 @@ class DealDAO @Inject() (implicit ec: ExecutionContext, dbConfigProvider: Databa
       println(side)
 
       if (side == "left"){
-        dishDAO.incriseScore(left)
+        dishDAO.incriseScore(left, right, 1)
       } else if (side == "right"){
-        dishDAO.incriseScore(right)
+        dishDAO.incriseScore(left, right, 0)
       }
     }
     //dbConfig.db.run(deals.filter(_.uid === id).map(_.done).update(true))
