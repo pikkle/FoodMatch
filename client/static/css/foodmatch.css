@@ -25,6 +25,8 @@ body {
       margin-top: 5px; }
       .choice-menu .dish-box .dish-box-bottom h4 {
         text-align: center; }
+      .choice-menu .dish-box .dish-box-bottom p {
+        text-align: justify; }
 
 .navbar-brand {
   font-size: 30px; }

@@ -56,7 +56,7 @@ object FoodMatchApp extends JSApp {
 		val leftTitle = dom.document.getElementById("left-dish-title")
 		val rightTitle = dom.document.getElementById("right-dish-title")
 
-		val leftKeywords = dom.document.getElementById("right-dish-keywords")
+		val leftKeywords = dom.document.getElementById("left-dish-keywords")
 		val rightKeywords = dom.document.getElementById("right-dish-keywords")
 
 		val leftImage = dom.document.getElementById("left-image").asInstanceOf[HTMLImageElement]
