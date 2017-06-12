@@ -7,7 +7,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 object ApiController {
-	val HOST: String = "http://localhost:9000"
+	//val HOST: String = "http://localhost:9000" //For local testes
+	val HOST: String = "/api" //For deployment
 	val jsonHeaders: Map[String, String] = Map("content-type" -> "application/json")
 
 	def fetchDeal(): Future[Deal] = Ajax.get(HOST + "/deal").flatMap(xhr => xhr.status match {

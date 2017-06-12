@@ -102,8 +102,10 @@ object FoodMatchApp extends JSApp {
 		}
 	}
 
+	@JSExportTopLevel("chooseLeft")
 	def chooseLeft(): Unit = choose("left", "right-image")
 
+	@JSExportTopLevel("chooseRight")
 	def chooseRight(): Unit = choose("right", "left-image")
 
 	override def main(): Unit = {}

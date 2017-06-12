@@ -61,6 +61,7 @@ class DealDAO @Inject()(implicit ec: ExecutionContext, dbConfigProvider: Databas
 	}
 
 	def voteDeal(id: String, side: String): Future[Any] = {
+		dbConfig.db.run(deals.filter(_.uid === id).map(_.done).update(true))
 		dbConfig.db.run(deals.filter(_.uid === id).result.head).map { deals =>
 			val right = deals.right
 			val left = deals.left
@@ -71,7 +72,6 @@ class DealDAO @Inject()(implicit ec: ExecutionContext, dbConfigProvider: Databas
 				dishDAO.incriseScore(left, right, 0)
 			}
 		}
-		//dbConfig.db.run(deals.filter(_.uid === id).map(_.done).update(true))
 	}
 
 }
