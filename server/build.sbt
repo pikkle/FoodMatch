@@ -2,7 +2,7 @@ name := "server"
 
 version := "1.0"
 
-lazy val `server` = (project in file(".")).enablePlugins(PlayScala)
+lazy val `server` = (project in file(".")).enablePlugins(PlayScala, DockerPlugin)
 
 scalaVersion := "2.11.7"
 
