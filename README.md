@@ -6,7 +6,7 @@ A Elo ranking is then calculated to determine the best Dish ever !
 
 
 ## Deployment
-Important you have to deploy the server first and need to have a mysql server
+Important: you have to deploy the server first and need to have a mysql server
 with the right schema, it can be found in the repo.
 You also need to have the Docker and sbt installed on your computer.
 Tested with Docker 17.03.1-ce and SBT 0.13.15 on macOS 10.12.5
@@ -19,6 +19,6 @@ To deploy the server you have to:
 ### Client
 To deploy the Client you have to:
   - First run ```sbt fullOptJS``` in the client direcroty
-  - Then run ```docker build -t client .``` in de client directory
+  - Then run ```docker build -t client .``` in the client directory
   - Once the build is done, run ```docker run -p80:80 --link server:server --name client client```
   - You can access the client to ```localhost:80```
