@@ -18,6 +18,7 @@ To deploy the server you have to:
 
 ### Client
 To deploy the Client you have to:
-  - Run ```docker build -t client .``` in de client directory
+  - First run ```sbt fullOptJS``` in the client direcroty
+  - Then run ```docker build -t client .``` in de client directory
   - Once the build is done, run ```docker run -p80:80 --link server:server --name client client```
   - You can access the client to ```localhost:80```
