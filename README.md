@@ -6,7 +6,7 @@ A Elo ranking is then calculated to determine the best Dish ever !
 
 
 ## Deployment
-Important you have to deploy de server first and need to have a mysql server
+Important you have to deploy the server first and need to have a mysql server
 with the right schema, it can be found in the repo.
 ### Server
 To deploy the server you have to:
