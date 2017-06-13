@@ -8,6 +8,8 @@ A Elo ranking is then calculated to determine the best Dish ever !
 ## Deployment
 Important you have to deploy the server first and need to have a mysql server
 with the right schema, it can be found in the repo.
+You also need to have the Docker and sbt installed on your computer.
+Tested with Docker 17.03.1-ce and SBT 0.13.15 on macOS 10.12.5
 ### Server
 To deploy the server you have to:
   - Insert the database connection informations in the ```application.conf```
